@@ -18,7 +18,7 @@ namespace Ceql.Execution
     {
         
         public Type Type;
-        public List<string> ArgumentMapping;
+        public List<ArgumentAlias> ArgumentMapping;
         public List<Tuple<string, string, MemberInfo>> MemberMapping;
         public ConstructorInfo Constructor;
         public object[] ConstArgumentsBuffer;
@@ -29,8 +29,14 @@ namespace Ceql.Execution
             //set contructor arguments
             for (var i = 0; i < ConstArgumentsBuffer.Length; i++)
             {
-                var idx = ArgumentMapping[i];
-                ConstArgumentsBuffer[i] = reader[idx];
+                var argumentAlias = ArgumentMapping[i];
+                var resultObject = reader[argumentAlias.Alias];
+
+                if(resultObject is DBNull) {
+                    ConstArgumentsBuffer[i] = null;
+                } else {
+                    ConstArgumentsBuffer[i] = resultObject;
+                }
             }
 
             //create instance
@@ -203,12 +209,12 @@ namespace Ceql.Execution
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        private List<string> ConstructorArgumentsMap(Type type)
+        private List<ArgumentAlias> ConstructorArgumentsMap(Type type)
         {
             var constructor = type.GetConstructors()[0];
             var arguments = constructor.GetParameters();
 
-            var argumentMap = new List<string>();
+            var argumentMap = new List<ArgumentAlias>();
             var selects = _selectList.Where(l => l.SourceType == type).ToList();
 
             foreach (var p in arguments)
@@ -216,7 +222,10 @@ namespace Ceql.Execution
                 var tsel = selects.FirstOrDefault(s => s.SourceMember.Name == p.Name);
                 if (tsel != null)
                 {
-                    argumentMap.Add(tsel.Alias);
+                    argumentMap.Add(new ArgumentAlias { 
+                        Alias = tsel.Alias,
+                        ArgumentType = p.ParameterType
+                    });
                 }
                 else
                 {
@@ -270,10 +279,11 @@ namespace Ceql.Execution
 
             return result;
         }
+    }
 
-
-
-
-
+    public class ArgumentAlias 
+    {
+        public Type ArgumentType {get; set;}
+        public string Alias {get; set;}
     }
 }

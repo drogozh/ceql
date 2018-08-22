@@ -169,6 +169,7 @@
             {"timestamp","DateTime" },
             {"datetime","DateTime"},
             {"int", "int" },
+            {"tinyint","int"},
             {"varchar","string" },
             {"float","float"},
             {"decimal","decimal"},
@@ -185,7 +186,5 @@
 
             throw new Exception("type " + typeName + " could not be mapped");
         }
-
-
     }
 }

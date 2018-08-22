@@ -16,6 +16,18 @@ namespace Ceql.Composition
             });
         }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="select"></param>
+        /// <param name="join"></param>
+        public FromClause(FromClause parent, SelectClause<T5> select, Expression<BooleanExpression<T1, T2, T3, T4, T5>> join)
+            : this(parent, join)
+        {
+            this.SubSelect = select;
+        }
+
 
         public SelectClause<T1, T2, T3, T4, T5, TResult> Select<TResult>(Expression<SelectExpression<T1, T2, T3, T4, T5, TResult>> select)
         {

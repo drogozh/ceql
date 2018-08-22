@@ -18,10 +18,18 @@
             _body = transactionBody;
         }
 
+        public T InsertSingle<T>(T entity) where T : ITable 
+        {
+            Insert<T>(new List<T>(){entity});
+            return entity;
+        }
+
         public IEnumerable<T> Insert<T>(IEnumerable<T> entities) where T : ITable
         {
             return Insert(entities, new InsertClause<T>().Model);
         }
+
+        
         
         public IEnumerable<T> FullInsert<T>(IEnumerable<T> entities) where T : ITable
         {
@@ -35,9 +43,9 @@
             foreach (var entity in entities)
             {
                 command.CommandText = model.ApplyParameters(entity);
-                _connector.PreInsert<T>(command, entity);
+                _connector.PreInsert<T>(command, entity, model.IsFull);
                 command.ExecuteScalar();
-                _connector.PostInsert<T>(command, entity);
+                _connector.PostInsert<T>(command, entity, model.IsFull);
             }
             return entities;
         }

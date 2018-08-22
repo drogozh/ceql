@@ -22,14 +22,19 @@
             return connection;
         }
 
-        public void PreInsert<T>(IDbCommand command, T entity) where T : ITable
+        public void PreInsert<T>(IDbCommand command, T entity, bool isFull) where T : ITable
         {
             return;
         }
 
 
-        public void PostInsert<T>(IDbCommand command, T entity) where T : ITable
+        public void PostInsert<T>(IDbCommand command, T entity, bool isFull) where T : ITable
         {
+            // do not retrieve auto id property
+            if(isFull) 
+            {
+                return;
+            }
 
             var type = TypeHelper.GetType<Attributes.Table>(entity.GetType());
             var autoSequence = TypeHelper
@@ -41,7 +46,6 @@
             {
                 return;
             }
-
             
             command.CommandText = "SELECT LAST_INSERT_ID()";
             using (var reader = command.ExecuteReader())
@@ -51,8 +55,6 @@
                 var value = Convert.ChangeType(reader[0],autoSequence.PropertyType);
                 autoSequence.SetValue(entity, value);
             }
-
         }
-
     }
 }

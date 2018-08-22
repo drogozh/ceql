@@ -10,9 +10,11 @@ namespace Ceql.Model
 {
     public class InsertStatementModel<T> : StatementModel<T> where T : ITable
     {
+        public bool IsFull {get; set;}
+
         public InsertStatementModel(IConnectorFormatter formatter) : base(formatter)
         { }
-        
+
         private object lck = new object();
         private string _sql;
 

@@ -2,7 +2,9 @@
 {
     using Ceql.Contracts;
     using Ceql.Formatters;
+    using Ceql.Model;
     using System;
+    using System.Reflection;
 
     public class MySqlFormatter : BaseFormatter
     {
@@ -19,6 +21,16 @@
         public override string ColumnNameEscape(string columnName)
         {
             return "`" + columnName + '`';
+        }
+        
+        public override object FormatMethodInfo(ISelectAlias instance, MethodInfo mi)
+        {
+            if (mi.Name == "ToString") 
+            { 
+                return new SqlSnippet(instance.ToString());
+            }
+            
+            return base.FormatMethodInfo(instance, mi);
         }
 
         public override object Format(object obj)
@@ -40,7 +52,7 @@
             }
 
             // numbers are number
-            if (obj is int || obj is long || obj is decimal || obj is float || obj is byte)
+            if (obj is int || obj is long || obj is decimal || obj is float || obj is byte || obj is sbyte)
             {
                 return obj;
             }

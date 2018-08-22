@@ -98,7 +98,12 @@ namespace Ceql.Expressions
 
             if (method.Name == "Like" && method.DeclaringType == typeof (AbstractComposer))
             {
-                return "LIKE ";
+                var field = Visit(exp.Arguments[0]);
+
+                var call = Expression.Lambda(exp.Arguments[1]).Compile();
+                var result = call.DynamicInvoke(null).ToString();
+
+                return String.Format("( {0} LIKE '{1}' )", field.ToString(), result.Replace("'","\'"));
             }
 
             var instance = exp.Object!= null ? Visit(exp.Object) : null;

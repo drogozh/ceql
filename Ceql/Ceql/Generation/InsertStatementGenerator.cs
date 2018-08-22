@@ -42,7 +42,8 @@
             {
                 Fields = fields,
                 TableName = tableName,
-                SchemaName = schemaName
+                SchemaName = schemaName,
+                IsFull = isFull            
             };
         }
     }

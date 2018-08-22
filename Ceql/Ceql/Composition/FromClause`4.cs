@@ -30,6 +30,13 @@ namespace Ceql.Composition
             return fc;
         }
 
+        public FromClause<T1, T2, T3, T4, T5> Left<T5>(SelectClause<T5> select, Expression<BooleanExpression<T1, T2, T3, T4, T5>> join)
+        {
+            var fc = new FromClause<T1, T2, T3, T4, T5>(this, select, join);
+            fc.JoinType = EJoinType.Left;
+            return fc;
+        }
+
         public WhereClause<T1, T2, T3, T4> Where(Expression<BooleanExpression<T1, T2, T3, T4>> filter)
         {
             return new WhereClause<T1, T2, T3, T4>(this, filter);
