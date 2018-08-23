@@ -16,6 +16,11 @@ namespace Ceql.Composition
             });
         }
 
+        public FromClause(FromClause parent, SelectClause<T4> select, Expression<BooleanExpression<T1, T2, T3, T4>> join) : this(parent, join)
+        {
+            this.SubSelect = select;
+        }
+
         //join to create 4 table from clause
         public FromClause<T1, T2, T3, T4, T5> Join<T5>(Expression<BooleanExpression<T1, T2, T3, T4, T5>> join) where T5 : ITable
         {

@@ -40,10 +40,16 @@ namespace Ceql.Composition
             this.SubSelect = select;
         }
 
-
         public FromClause<T1, T2, T3> Join<T3>(Expression<BooleanExpression<T1, T2, T3>> join) where T3 : ITable
         {
             return new FromClause<T1, T2, T3>(this, join);
+        }
+
+        public FromClause<T1, T2, T3> Left<T3>(Expression<BooleanExpression<T1, T2, T3>> join) where T3 : ITable
+        {
+            var fc = new FromClause<T1, T2, T3>(this, join);
+            fc.JoinType = EJoinType.Left;
+            return fc;
         }
 
         public FromClause<T1, T2, T3> Join<T3>(SelectClause<T3> select, Expression<BooleanExpression<T1, T2, T3>> join)
@@ -51,9 +57,9 @@ namespace Ceql.Composition
             return new FromClause<T1, T2, T3>(this, select, join);
         }
 
-        public FromClause<T1, T2, T3> Left<T3>(Expression<BooleanExpression<T1, T2, T3>> join) where T3 : ITable
+        public FromClause<T1, T2, T3> Left<T3>(SelectClause<T3> select, Expression<BooleanExpression<T1, T2, T3>> join)
         {
-            var fc = new FromClause<T1, T2, T3>(this, join);
+            var fc = new FromClause<T1, T2, T3>(this, select, join);
             fc.JoinType = EJoinType.Left;
             return fc;
         }
@@ -67,7 +73,5 @@ namespace Ceql.Composition
         {
             return new SelectClause<T1, T2, TResult>(this, null, select);
         }
-
     }
-
 }

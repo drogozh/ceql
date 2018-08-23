@@ -14,7 +14,6 @@ namespace Ceql.Composition
                 Expression = join,
                 ExpressionBoundClauses = CeqlUtils.GetStatementList(this)
             });
-
         }
 
         public FromClause(FromClause parent, SelectClause<T3> select, Expression<BooleanExpression<T1, T2, T3>> join) : this(parent, join)
@@ -44,6 +43,12 @@ namespace Ceql.Composition
             fc.JoinType = EJoinType.Left;
             return fc;
         }
+        
+        public FromClause<T1, T2, T3, T4> Left<T4>(SelectClause<T4> select, Expression<BooleanExpression<T1, T2, T3, T4>> join)
+        {
+            var fc = new FromClause<T1, T2, T3, T4>(this, select, join);
+            fc.JoinType = EJoinType.Left;
+            return fc;
+        }
     }
-
 }

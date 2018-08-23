@@ -29,8 +29,6 @@
             return Insert(entities, new InsertClause<T>().Model);
         }
 
-        
-        
         public IEnumerable<T> FullInsert<T>(IEnumerable<T> entities) where T : ITable
         {
             return Insert(entities,new InsertClause<T>().FullModel);
@@ -83,7 +81,7 @@
         /// <summary>
         /// Executes transaction statements
         /// </summary>
-        public void Execute()
+        protected void Execute(Action<ITransaction> action)
         {
             _connection = CeqlConfiguration.Instance.GetConnection();
             _connector = CeqlConfiguration.Instance.GetConnector();
@@ -94,7 +92,7 @@
 
             try
             {
-                _body(this);
+                action(this);
                 dbTransaction.Commit();
             }
             catch (Exception)
@@ -106,6 +104,30 @@
             {
                 _connection.Close();
             }
+        }
+
+        public void Execute()
+        {
+            Execute(_body);
+        }
+    }
+
+    public class ResultTransaction<T> : Transaction 
+    {
+        private Func<ITransaction,T> _body;
+
+        public ResultTransaction(Func<ITransaction,T> transactionBody): base(null)
+        {
+            _body = transactionBody;
+        }
+
+        public new T Execute()
+        {
+            T result = default(T);
+            this.Execute(t=> {
+                result = _body(t);
+            });
+            return result;
         }
     }
 }

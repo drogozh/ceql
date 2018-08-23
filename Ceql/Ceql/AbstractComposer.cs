@@ -19,6 +19,10 @@
             return new Transaction(transactionBody);
         }
 
+        public static ResultTransaction<T> Transaction<T>(Func<ITransaction,T> transactionBody)
+        {
+            return new ResultTransaction<T>(transactionBody);
+        }
         
         /// <summary>
         /// 
