@@ -18,6 +18,11 @@
             this.SelectExpression = select;
         }
 
+        public SelectClause<T> Unique()
+        {
+            this.IsDistinct = true;
+            return this;
+        }
 
         public IEnumerator<T> GetEnumerator()
         {
