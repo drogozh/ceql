@@ -1,6 +1,8 @@
 ﻿namespace Ceql.Contracts
 {
+    using System;
     using System.Collections.Generic;
+    using System.Linq.Expressions;
 
     public interface ITransaction
     {
@@ -11,6 +13,7 @@
 
         IEnumerable<T> FullInsert<T>(IEnumerable<T> records) where T : ITable;
         void Delete<T>(IEnumerable<T> records) where T : ITable;
+        void Delete<T>(Expression<BooleanExpression<T>> records) where T : ITable;
         void Update<T>(IEnumerable<T> records) where T : ITable;
     }
 }

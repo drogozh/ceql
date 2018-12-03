@@ -1,6 +1,7 @@
 ﻿namespace Ceql.Composition
 {
     using System.Linq.Expressions;
+    using Ceql.Contracts;
 
     public class SelectClause<T1, T2, T3, T4, T5, TResult> 
         : SelectClause<TResult>

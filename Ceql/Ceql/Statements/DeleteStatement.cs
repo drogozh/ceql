@@ -1,5 +1,6 @@
 ﻿namespace Ceql.Statements
 {
+    using Ceql.Composition;
     using Ceql.Contracts;
     using Ceql.Generation;
     using Ceql.Model;
@@ -23,12 +24,21 @@
             }
         }
 
+        public WhereClause<T> WhereClause { get; }
+
         public DeleteStatementModel<T> Model
         {
             get
             {
                 return DeleteStatementGenerator.Generate<T>(this);
             }
+        }
+
+        public DeleteStatement(){}
+
+        public DeleteStatement(WhereClause<T> whereClause)
+        {
+            this.WhereClause = whereClause;
         }
     }
 }

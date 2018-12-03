@@ -28,6 +28,7 @@
     <Compile Include="..\..\Ceql.Contracts\ISqlExpression.cs" Link="ISqlExpression.cs" />
     <Compile Include="..\..\Ceql.Contracts\ITable.cs" Link="ITable.cs" />
     <Compile Include="..\..\Ceql.Contracts\ITransaction.cs" Link="ITransaction.cs" />
+    <Compile Include="..\..\Ceql.Contracts\Delegates.cs" Link="Delegates.cs" />
   </ItemGroup>
 
   <ItemGroup>

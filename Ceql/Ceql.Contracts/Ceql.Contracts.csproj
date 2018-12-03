@@ -59,6 +59,7 @@
     <Compile Include="ITable.cs" />
     <Compile Include="IConnectorFormatter.cs" />
     <Compile Include="ITransaction.cs" />
+    <Compile Include="Delegates.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

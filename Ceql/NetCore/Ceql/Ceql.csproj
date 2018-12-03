@@ -20,8 +20,6 @@
 
   <ItemGroup>
     <Compile Include="..\..\Ceql\AbstractComposer.cs" Link="AbstractComposer.cs" />
-    <Compile Include="..\..\Ceql\Composition\Delegates.cs" Link="Composition\Delegates.cs" />
-    <Compile Include="..\..\Ceql\Composition\DeleteClause.cs" Link="Composition\DeleteClause.cs" />
     <Compile Include="..\..\Ceql\Composition\EBooleanOperator.cs" Link="Composition\EBooleanOperator.cs" />
     <Compile Include="..\..\Ceql\Composition\EJoinType.cs" Link="Composition\EJoinType.cs" />
     <Compile Include="..\..\Ceql\Composition\ExpressionAggregator.cs" Link="Composition\ExpressionAggregator.cs" />
@@ -62,6 +60,7 @@
     <Compile Include="..\..\Ceql\Generation\DeleteStatementGenerator.cs" Link="Generation\DeleteStatementGenerator.cs" />
     <Compile Include="..\..\Ceql\Generation\InsertStatementGenerator.cs" Link="Generation\InsertStatementGenerator.cs" />
     <Compile Include="..\..\Ceql\Generation\SelectStatementGenerator.cs" Link="Generation\SelectStatementGenerator.cs" />
+    <Compile Include="..\..\Ceql\Generation\StatementGenerator.cs" Link="Generation\StatementGenerator.cs" />
     <Compile Include="..\..\Ceql\Model\DeleteStatementModel.cs" Link="Model\DeleteStatementModel.cs" />
     <Compile Include="..\..\Ceql\Model\FromAlias.cs" Link="Model\FromAlias.cs" />
     <Compile Include="..\..\Ceql\Model\InsertStatementModel.cs" Link="Model\InsertStatementModel.cs" />

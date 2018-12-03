@@ -3,6 +3,7 @@
     using System.Collections;
     using System.Collections.Generic;
     using System.Linq.Expressions;
+    using Ceql.Contracts;
     using Ceql.Execution;
     using Ceql.Statements;
 

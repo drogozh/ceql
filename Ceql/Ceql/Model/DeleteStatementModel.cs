@@ -10,6 +10,10 @@
         public DeleteStatementModel(IConnectorFormatter formatter) :base(formatter)
         {}
 
+        public string WhereSql {get; set;}
+
+        public string FromSql {get; set;}
+
         private object lck = new object();
         private string _sql;
 

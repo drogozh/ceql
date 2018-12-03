@@ -6,6 +6,8 @@
     using System.Data;
     using Ceql.Composition;
     using Ceql.Configuration;
+    using System.Linq.Expressions;
+    using Ceql.Statements;
 
     public class Transaction : ITransaction
     {
@@ -56,12 +58,29 @@
         /// <param name="entities"></param>
         public void Delete<T>(IEnumerable<T> entities) where T : ITable
         {
-            var model = new DeleteClause<T>().Model;
-            var command = _connection.CreateCommand();
-
-            foreach (var entity in entities)
+            var model = new DeleteStatement<T>().Model;
+            using(var command = _connection.CreateCommand())
             {
-                command.CommandText = model.ApplyParameters(entity);
+                foreach (var entity in entities)
+                {
+                    command.CommandText = model.ApplyParameters(entity);
+                    command.ExecuteScalar();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Deletes records using boolean expression
+        /// <summary>
+        public void Delete<T>(Expression<BooleanExpression<T>> expression) where T : ITable
+        {
+            var whereClause = new WhereClause<T>(new FromClause<T>(), expression);
+            var model = new DeleteStatement<T>(whereClause).Model;
+            // todo: hack, refactor
+            var sql = "DELETE FROM T0 USING " + model.FromSql.Replace("FROM","") + " " + model.WhereSql;
+
+            using(var command = _connection.CreateCommand()){
+                command.CommandText = sql;
                 command.ExecuteScalar();
             }
         }

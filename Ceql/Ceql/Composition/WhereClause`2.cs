@@ -1,5 +1,6 @@
 ﻿namespace Ceql.Composition
 {
+    using Ceql.Contracts;
     using Ceql.Utils;
     using System;
     using System.Collections.Generic;
