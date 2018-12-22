@@ -27,15 +27,15 @@
 
             var schemaName = schemaAtr != null ? schemaAtr.Name : null;
 
-            var expressionClauses = HandleExpression(statement.WhereClause,formatter);
+            var expressionClauses = HandleExpression(statement?.WhereClause,formatter);
 
             return new DeleteStatementModel<T>(CeqlConfiguration.Instance.GetConnectorFormatter())
             {
                 Fields = fields,
                 TableName = tableName,
                 SchemaName = schemaName,
-                WhereSql = expressionClauses.WhereSql,
-                FromSql = expressionClauses.FromSql
+                WhereSql = expressionClauses?.WhereSql,
+                FromSql = expressionClauses?.FromSql
             };
         }
 

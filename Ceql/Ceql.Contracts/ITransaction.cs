@@ -11,6 +11,10 @@
 
         IEnumerable<T> Insert<T>(IEnumerable<T> records) where T : ITable;
 
+        /**
+            Insert record for every field in the table
+            providing values for auto increment fields also
+         */
         IEnumerable<T> FullInsert<T>(IEnumerable<T> records) where T : ITable;
         void Delete<T>(IEnumerable<T> records) where T : ITable;
         void Delete<T>(Expression<BooleanExpression<T>> records) where T : ITable;

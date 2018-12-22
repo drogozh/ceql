@@ -20,18 +20,18 @@
             _body = transactionBody;
         }
 
-        public T InsertSingle<T>(T entity) where T : ITable 
+        public virtual T InsertSingle<T>(T entity) where T : ITable 
         {
             Insert<T>(new List<T>(){entity});
             return entity;
         }
 
-        public IEnumerable<T> Insert<T>(IEnumerable<T> entities) where T : ITable
+        public virtual IEnumerable<T> Insert<T>(IEnumerable<T> entities) where T : ITable
         {
             return Insert(entities, new InsertClause<T>().Model);
         }
 
-        public IEnumerable<T> FullInsert<T>(IEnumerable<T> entities) where T : ITable
+        public virtual IEnumerable<T> FullInsert<T>(IEnumerable<T> entities) where T : ITable
         {
             return Insert(entities,new InsertClause<T>().FullModel);
         }
@@ -56,7 +56,7 @@
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="entities"></param>
-        public void Delete<T>(IEnumerable<T> entities) where T : ITable
+        public virtual void Delete<T>(IEnumerable<T> entities) where T : ITable
         {
             var model = new DeleteStatement<T>().Model;
             using(var command = _connection.CreateCommand())
@@ -72,7 +72,7 @@
         /// <summary>
         /// Deletes records using boolean expression
         /// <summary>
-        public void Delete<T>(Expression<BooleanExpression<T>> expression) where T : ITable
+        public virtual void Delete<T>(Expression<BooleanExpression<T>> expression) where T : ITable
         {
             var whereClause = new WhereClause<T>(new FromClause<T>(), expression);
             var model = new DeleteStatement<T>(whereClause).Model;
@@ -90,7 +90,7 @@
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="values"></param>
-        public void Update<T>(IEnumerable<T> entities) where T : ITable
+        public virtual void Update<T>(IEnumerable<T> entities) where T : ITable
         {
             Delete(entities);
             FullInsert(entities);
