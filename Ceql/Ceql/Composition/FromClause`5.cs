@@ -28,6 +28,10 @@ namespace Ceql.Composition
             this.SubSelect = select;
         }
 
+        public WhereClause<T1, T2, T3, T4,T5> Where(Expression<BooleanExpression<T1, T2, T3, T4,T5>> filter)
+        {
+            return new WhereClause<T1, T2, T3, T4,T5>(this, filter);
+        }
 
         public SelectClause<T1, T2, T3, T4, T5, TResult> Select<TResult>(Expression<SelectExpression<T1, T2, T3, T4, T5, TResult>> select)
         {
