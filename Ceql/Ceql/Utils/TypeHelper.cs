@@ -4,12 +4,17 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Ceql.Contracts.Attributes;
 
 namespace Ceql.Utils
 {
     public static class TypeHelper
     {
-
+        /// <summary>
+        /// Enumerates the type properties.
+        /// </summary>
+        /// <returns>The type properties.</returns>
+        /// <param name="type">Type.</param>
         public static IEnumerable<String> EnumerateTypeProperties(this Type type)
         {
             return type.GetProperties().Select(x => x.Name);
@@ -36,6 +41,12 @@ namespace Ceql.Utils
             return default(T);
         }
 
+        /// <summary>
+        /// Gets the type.
+        /// </summary>
+        /// <returns>The type.</returns>
+        /// <param name="sourceType">Source type.</param>
+        /// <typeparam name="T">The 1st type parameter.</typeparam>
         public static Type GetType<T>(Type sourceType) where T : System.Attribute
         {
             while (sourceType != null)
@@ -63,25 +74,42 @@ namespace Ceql.Utils
             return properties.Where(p => p.GetCustomAttribute<T>() != null).ToList();
         }
 
+        /// <summary>
+        /// Gets the primary key properties decorated with [PrimaryKey] attribute
+        /// </summary>
+        /// <returns>The primary key.</returns>
+        /// <param name="type">Source type.</param>
+        public static List<PropertyInfo> GetPrimaryKeyProperties(this Type type)
+        {
+            return type.GetProperties().Where(property => property.GetCustomAttribute(typeof(PrimaryKey)) != null).ToList();
+        }
 
-#if NET_CORE
+        /// <summary>
+        /// Loads the type.
+        /// </summary>
+        /// <returns>The type.</returns>
+        /// <param name="typeName">Type name.</param>
+        /// <typeparam name="T">The 1st type parameter.</typeparam>
         public static T LoadType<T>(string typeName) where T : class
         {
             var type = Type.GetType(typeName);
             var instance = Activator.CreateInstance(type) as T;
             return instance;
         }
-#endif
 
-
-#if !NET_CORE
-        public static T LoadType<T>(string typeName) where T : class
+        /// <summary>
+        /// Gets the name of the field.
+        /// </summary>
+        /// <returns>The field name.</returns>
+        /// <param name="property">Property.</param>
+        public static string GetFieldName(PropertyInfo property) 
         {
-            var type = Type.GetType(typeName);
-            var instance = Activator.CreateInstance(type) as T;
-            return instance;
+            var fieldAttr = property.GetCustomAttribute<Field>();
+            if(fieldAttr == null) 
+            {
+                return null;
+            }
+            return fieldAttr.Name;
         }
-#endif
-
     }
 }

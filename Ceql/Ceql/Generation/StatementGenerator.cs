@@ -7,20 +7,18 @@ namespace Ceql.Generation
     using Ceql.Expressions;
     using Ceql.Statements;
     using Ceql.Model;
-    using Ceql.Formatters;
     using Ceql.Contracts;
-    using Ceql.Configuration;
 
     public static class StatementGenerator
     {
         /// <summary>
-        /// 
+        /// Gets the alias list.
         /// </summary>
-        /// <param name="from"></param>
-        /// <returns></returns>
+        /// <returns>The alias list.</returns>
+        /// <param name="from">From.</param>
+        /// <param name="subQueryHandler">Sub query handler.</param>
         public static List<FromAlias> GetAliasList(FromClause from, Func<SelectStatement, SelectStatementModel> subQueryHandler = null)
         {
-
             var joinCount = 0;
             var node = from;
             while (node.Parent != null)
@@ -57,22 +55,28 @@ namespace Ceql.Generation
             return list;
         }
 
-                /// <summary>
-        /// Returns SQL statement for the FromClause member of the SelectClause
+
+        /// <summary>
+        /// Returns sql for the 'FROM' clause of the sql query
         /// </summary>
-        /// <param name="selectClause"></param>
-        /// <returns></returns>
+        /// <returns>The sql.</returns>
+        /// <param name="fromClause">From clause.</param>
+        /// <param name="list">List.</param>
+        /// <param name="formatter">Formatter.</param>
         public static string FromSql(FromClause fromClause, List<FromAlias> list, IConnectorFormatter formatter)
         {
             var sql = "FROM " + BuildJoins(formatter, fromClause, list);
             return sql;
         }
 
+
         /// <summary>
-        /// 
+        /// Returns sql for the 'WHERE' clause of the sql query 
         /// </summary>
-        /// <param name="selectClause"></param>
-        /// <returns></returns>
+        /// <returns>The sql.</returns>
+        /// <param name="whereClause">Where clause.</param>
+        /// <param name="aliasList">Alias list.</param>
+        /// <param name="formatter">Formatter.</param>
         public static string WhereSql(WhereClause whereClause, List<FromAlias> aliasList, IConnectorFormatter formatter)
         {
             //var whereClause = selectClause.WhereClause;
@@ -104,6 +108,7 @@ namespace Ceql.Generation
             return whereSql;
         }
 
+
         /// <summary>
         /// Filters master alias list to get an ordered alias list only for the ExpressionBoundClauses references in the select or join expression
         /// </summary>
@@ -123,6 +128,7 @@ namespace Ceql.Generation
             return faList;
         }
     
+
         /// <summary>
         /// 
         /// </summary>
@@ -154,7 +160,7 @@ namespace Ceql.Generation
             if (from.Parent != null)
             {
                 var analyzer = new ConditionExpressionAnalyzer(formatter);
-                var statement = BuildJoins(formatter, from.Parent, aliasList) + joinType + TableSql(formatter, from, aliasList) + " on ";
+                var statement = BuildJoins(formatter, from.Parent, aliasList) + joinType + TableSql(from, aliasList, formatter) + " on ";
 
                 var joinCondition = "";
                for(var i=0; i<from.JoinExpression.Count; i++)
@@ -188,15 +194,16 @@ namespace Ceql.Generation
             }
             
             //driver tables
-            return TableSql(formatter, from, aliasList);
+            return TableSql(from, aliasList, formatter);
         }
+
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="from"></param>
         /// <returns></returns>
-        private static string TableSql(IConnectorFormatter formatter, FromClause from, List<FromAlias> aliases )
+        public static string TableSql(FromClause from, List<FromAlias> aliases, IConnectorFormatter formatter)
         {
             //get alias for this clause
             var alias = aliases.First(x => x.FromClause == from);

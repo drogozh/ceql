@@ -27,8 +27,6 @@ namespace Ceql.Utils
             return list;
         }
 
-
-
         /// <summary>
         /// 
         /// </summary>

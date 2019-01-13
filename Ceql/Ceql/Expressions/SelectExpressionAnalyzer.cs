@@ -13,20 +13,16 @@
     class SelectExpressionAnalyzer
     {
         private readonly List<FromAlias> _aliasList;
-        private SelectStatement _select;
         private IConnectorFormatter _formatter;
 
-        public SelectExpressionAnalyzer(IConnectorFormatter formatter, SelectStatement select, List<FromAlias> aliasList )
+        public SelectExpressionAnalyzer(IConnectorFormatter formatter, LambdaExpression expression, List<FromAlias> aliasList )
         {
             this._aliasList = aliasList;
-            this._select = select;
+           
             _formatter = formatter;
 
-            var lambda = select.SelectExpression as LambdaExpression;
-            if (lambda == null) throw new Exception("Invalid expression");
-
-            _parameters = lambda.Parameters;
-            _expression = lambda;
+            _parameters = expression.Parameters;
+            _expression = expression;
             _memberAccessDecoder = new MemberAccessDecoder(_parameters.ToList(), _aliasList);
         }
 

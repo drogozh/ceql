@@ -11,6 +11,7 @@
     using Ceql.Contracts;
     using Ceql.Configuration;
     using static Ceql.Generation.StatementGenerator;
+    using System.Linq.Expressions;
 
     public class SelectStatementGenerator
     {
@@ -36,7 +37,7 @@
         /// <returns></returns>
         public SelectStatementModel GetModel(SelectStatement selectClause)
         {
-            var select = selectClause.IsDistinct ? "select distinct " : "select ";
+            var select = selectClause.IsDistinct ? "SELECT DISTINCT " : "SELECT ";
             var from = "";
             var where = "";
             var limit = "";
@@ -104,7 +105,7 @@
         /// <returns></returns>
         private IEnumerable<SelectAlias> BuildSelectList(SelectStatement select, List<FromAlias> aliasList )
         {
-            var analyzer = new SelectExpressionAnalyzer(_formatter, select, FilterExpressionAliasList(aliasList, select.ExpressionBoundClauses));
+            var analyzer = new SelectExpressionAnalyzer(_formatter, select.SelectExpression as LambdaExpression, FilterExpressionAliasList(aliasList, select.ExpressionBoundClauses));
             return (List<SelectAlias>)analyzer.Sql();
         }
     }

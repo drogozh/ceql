@@ -13,17 +13,23 @@
 
     public abstract class AbstractComposer
     {
-
         public static ITransaction Transaction(Action<ITransaction> transactionBody)
         {
             return new Transaction(transactionBody);
         }
 
+        /// <summary>
+        /// Transaction the specified transactionBody.
+        /// </summary>
+        /// <returns>The transaction.</returns>
+        /// <param name="transactionBody">Transaction body.</param>
+        /// <typeparam name="T">The 1st type parameter.</typeparam>
         public static ResultTransaction<T> Transaction<T>(Func<ITransaction,T> transactionBody)
         {
             return new ResultTransaction<T>(transactionBody);
         }
-        
+
+
         /// <summary>
         /// 
         /// </summary>
@@ -36,6 +42,7 @@
             if (attr == null) return null;
             return attr.ConstructorArguments[0].Value.ToString();
         }
+
 
         /// <summary>
         /// Returns a select clause that will result in select SQl however does not use any tables 
@@ -51,14 +58,15 @@
 
         /// <summary>
         /// Top level table select
+        /// Use type parameter to specify table
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="alias"></param>
         /// <returns></returns>
         public static FromClause<T> From<T>() where T : ITable
         {
             return new FromClause<T>();
         }
+
 
         /// <summary>
         /// Top level sub-query select
@@ -84,6 +92,7 @@
             return true;
         }
 
+
         /// <summary>
         /// Like clause generator
         /// </summary>
@@ -95,6 +104,7 @@
         {
             return true;
         }
+
 
         /// <summary>
         /// 

@@ -68,6 +68,11 @@
             }
         }
 
+
+        /// <summary>
+        /// Adds the join expression.
+        /// </summary>
+        /// <param name="expressionAggregator">Expression aggregator.</param>
         public void AddJoinExpression(ExpressionAggregator expressionAggregator)
         {
             JoinExpression.Add(expressionAggregator);
