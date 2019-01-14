@@ -12,7 +12,7 @@ namespace Ceql.Statements
     using System.Linq.Expressions;
     using System.Reflection;
 
-    public class UpdateStatement<T> : ISqlExpression, IUpdateStatement<T> where T : ITable
+    public class UpdateStatement<T> : ISqlExpression, IUpdateStatement<T>
     {
         /// <summary>
         /// Gets the type.
@@ -122,6 +122,6 @@ namespace Ceql.Statements
             return this;
         }
 
-        public virtual void Update<T1>(IEnumerable<T1> entities) where T1 : ITable => throw new NotImplementedException();
+        public virtual void Update<T1>(IEnumerable<T1> entities) => throw new NotImplementedException();
     }
 }

@@ -6,7 +6,7 @@
     using Ceql.Model;
     using System;
 
-    public class DeleteStatement<T> : ISqlExpression where T : ITable
+    public class DeleteStatement<T> : ISqlExpression
     {
         public Type Type
         {

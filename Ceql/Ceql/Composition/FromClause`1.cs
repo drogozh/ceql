@@ -28,7 +28,7 @@ namespace Ceql.Composition
         }
 
         //inner table join
-        public FromClause<T, T1> Join<T1>(Expression<BooleanExpression<T, T1>> join) where T1 : ITable
+        public FromClause<T, T1> Join<T1>(Expression<BooleanExpression<T, T1>> join)
         {
             return new FromClause<T, T1>(this, join);
         }

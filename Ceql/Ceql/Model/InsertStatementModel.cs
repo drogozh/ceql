@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Ceql.Model
 {
-    public class InsertStatementModel<T> : StatementModel<T> where T : ITable
+    public class InsertStatementModel<T> : StatementModel<T>
     {
         public bool IsFull {get; set;}
 

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Ceql.Model
 {
-    public class UpdateStatementModel<T> : StatementModel<T> where T : ITable
+    public class UpdateStatementModel<T> : StatementModel<T>
     {
         
         public UpdateStatementModel(IConnectorFormatter formatter) : base(formatter)

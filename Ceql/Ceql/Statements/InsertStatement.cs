@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Ceql.Statements
 {
-    public class InsertStatement<T> : ISqlExpression where T : ITable
+    public class InsertStatement<T> : ISqlExpression
     {
         public Type Type
         {

@@ -3,24 +3,24 @@
     using Ceql.Contracts;
     using System;
 
-    public class ResultTransaction<T> : Transaction
+    public class ResultTransaction<T> : BaseTransaction
     {
-        private Func<ITransaction, T> _body;
-
-
-        public ResultTransaction(Func<ITransaction, T> transactionBody) : base(null)
+        private Func<TransactionBody, T> _body;
+        private T _result = default(T);
+        public ResultTransaction(Func<TransactionBody, T> transactionBody)
         {
             _body = transactionBody;
         }
 
-
         public new T Execute()
         {
-            T result = default(T);
-            Execute(t => {
-                result = _body(t);
-            });
-            return result;
+            base.Execute();
+            return _result;
+        }
+
+        protected override void DoTransaction()
+        {
+            _result = _body(new TransactionBody(this));
         }
     }
 }

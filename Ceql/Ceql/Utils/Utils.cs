@@ -1,16 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
-using Ceql.Composition;
-
-namespace Ceql.Utils
+﻿namespace Ceql.Utils
 {
+    using System.Collections.Generic;
+    using System.Linq.Expressions;
+    using System.Security.Cryptography;
+    using Ceql.Composition;
+    using Ceql.Contracts;
+
     public static class CeqlUtils
     {
-
+        /// <summary>
+        /// Gets the statement list.
+        /// </summary>
+        /// <returns>The statement list.</returns>
+        /// <param name="from">From.</param>
         public static List<FromClause> GetStatementList(FromClause from)
         {
             var list = new List<FromClause>();
@@ -54,6 +56,12 @@ namespace Ceql.Utils
         }
 
         private const string hexMap = "0123456789ABCDEF";
+
+        /// <summary>
+        /// Tos the base16 string.
+        /// </summary>
+        /// <returns>The base16 string.</returns>
+        /// <param name="bytes">Bytes.</param>
         public static string ToBase16String(byte[] bytes)
         {
             var result = "";
@@ -65,7 +73,18 @@ namespace Ceql.Utils
             return result;
         }
 
-
-
+        /// <summary>
+        /// Gets the property selection expression.
+        /// </summary>
+        /// <returns>The property selection expression.</returns>
+        /// <param name="propertyName">Property name.</param>
+        /// <typeparam name="T">The 1st type parameter.</typeparam>
+        public static Expression<SelectExpression<T, object>> GetPropertySelectionExpression<T>(string propertyName)
+        {
+            var param = Expression.Parameter(typeof(T));
+            var property = Expression.Property(param, propertyName);
+            var convertExpression = Expression.Convert(property, typeof(object));
+            return Expression.Lambda<SelectExpression<T, object>>(convertExpression, new List<ParameterExpression>() { param });
+        }
     }
 }

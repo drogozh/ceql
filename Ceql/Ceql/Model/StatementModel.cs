@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Ceql.Model
 {
-    public abstract class StatementModel<T> where T : ITable
+    public abstract class StatementModel<T>
     {
         public IEnumerable<PropertyInfo> Fields { get; set; }
         public string TableName { get; set; }

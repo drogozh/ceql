@@ -16,7 +16,7 @@ namespace Ceql.Generation
 
     public static class UpdateStatementGenerator
     {
-        public static UpdateStatementModel<T> Generate<T>(UpdateStatement<T> statement) where T : ITable
+        public static UpdateStatementModel<T> Generate<T>(UpdateStatement<T> statement)
         {
             return null;
         }

@@ -5,7 +5,7 @@
     using System.Linq;
     using System.Reflection;
 
-    public class DeleteStatementModel<T> : StatementModel<T> where T : ITable
+    public class DeleteStatementModel<T> : StatementModel<T>
     {
         public DeleteStatementModel(IConnectorFormatter formatter) :base(formatter)
         {}

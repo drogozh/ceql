@@ -32,12 +32,12 @@ namespace Ceql.Composition
         }
 
         //join to create 4 table from clause
-        public FromClause<T1, T2, T3, T4> Join<T4>(Expression<BooleanExpression<T1, T2, T3, T4>> join) where T4 : ITable
+        public FromClause<T1, T2, T3, T4> Join<T4>(Expression<BooleanExpression<T1, T2, T3, T4>> join)
         {
             return new FromClause<T1, T2, T3, T4>(this, join);
         }
 
-        public FromClause<T1, T2, T3, T4> Left<T4>(Expression<BooleanExpression<T1, T2, T3, T4>> join) where T4 : ITable
+        public FromClause<T1, T2, T3, T4> Left<T4>(Expression<BooleanExpression<T1, T2, T3, T4>> join)
         {
             var fc = new FromClause<T1, T2, T3, T4>(this, join);
             fc.JoinType = EJoinType.Left;

@@ -22,13 +22,13 @@
             return connection;
         }
 
-        public void PreInsert<T>(IDbCommand command, T entity, bool isFull) where T : ITable
+        public void PreInsert<T>(IDbCommand command, T entity, bool isFull)
         {
             return;
         }
 
 
-        public void PostInsert<T>(IDbCommand command, T entity, bool isFull) where T : ITable
+        public void PostInsert<T>(IDbCommand command, T entity, bool isFull)
         {
             // do not retrieve auto id property
             if(isFull) 

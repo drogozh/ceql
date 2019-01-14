@@ -3,7 +3,7 @@
     using Ceql.Contracts;
     using Ceql.Statements;
 
-    public class InsertClause<T> : InsertStatement<T> where T: ITable
+    public class InsertClause<T> : InsertStatement<T>
     {
     }
 }

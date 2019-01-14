@@ -16,7 +16,7 @@
 
     public static class InsertStatementGenerator
     {
-        public static InsertStatementModel<T> Generate<T>(InsertStatement<T> statement, bool isFull = false) where T : ITable
+        public static InsertStatementModel<T> Generate<T>(InsertStatement<T> statement, bool isFull = false)
         {
             var table = TypeHelper.GetType<Attributes.Table>(statement.Type);
 

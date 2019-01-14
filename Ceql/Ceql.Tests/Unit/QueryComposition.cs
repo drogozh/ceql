@@ -1,4 +1,3 @@
-
 namespace Ceql.Tests.Unit
 {
     using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -6,6 +5,7 @@ namespace Ceql.Tests.Unit
     using Ceql.Tests.Model;
     using Ceql.Configuration;
     using Ceql.Statements;
+    using Ceql.Utils;
 
     [TestClass]
     public class QueryComposition
@@ -16,14 +16,12 @@ namespace Ceql.Tests.Unit
             CeqlConfiguration.Load("Configs/ceql.mysql.json");
         }
 
-
         [TestMethod]
         public void Select_SingleField()
         {
             var sql = From<Customer>().Select(c => c.Name).Sql;
             Assert.IsTrue(sql == "SELECT T0.NAME T0_NAME FROM `CEQL_TEST`.`CUSTOMER` T0");
         }
-
 
         [TestMethod]
         public void Select_MultipleFields()
@@ -37,7 +35,6 @@ namespace Ceql.Tests.Unit
             Assert.IsTrue(sql == "SELECT T0.CUSTOMER_ID T0_CUSTOMER_ID,T0.NAME T0_NAME,T0.CREATION_DT T0_CREATION_DT FROM `CEQL_TEST`.`CUSTOMER` T0");
         }
 
-
         [TestMethod]
         public void Update_SingleField_EntireTable()
         {
@@ -48,17 +45,13 @@ namespace Ceql.Tests.Unit
             Assert.IsTrue(sql == "UPDATE `CEQL_TEST`.`CUSTOMER` T0 SET T0.CREATION_DT = '2019-01-01'");
         }
 
-
         [TestMethod]
         public void Update_TypeCast()
         {
-            var sql =
-            new UpdateStatement<Customer>(customer => customer.CreationDate)
-            .Values("2019-01-01").Sql;
-
+            var expression = CeqlUtils.GetPropertySelectionExpression<Customer>("CreationDate"); 
+            var sql = new UpdateStatement<Customer>(expression).Values("2019-01-01").Sql;
             Assert.IsTrue(sql == "UPDATE `CEQL_TEST`.`CUSTOMER` T0 SET T0.CREATION_DT = '2019-01-01'");
         }
-
 
         [TestMethod]
         public void Update_SingleField_SingleRecord()

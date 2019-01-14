@@ -12,7 +12,7 @@
 
     public class DeleteStatementGenerator
     {
-        public static DeleteStatementModel<T> Generate<T>(DeleteStatement<T> statement) where T : ITable
+        public static DeleteStatementModel<T> Generate<T>(DeleteStatement<T> statement)
         {
             var formatter = CeqlConfiguration.Instance.GetConnectorFormatter();
             
