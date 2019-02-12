@@ -10,7 +10,7 @@ namespace Ceql.Execution
     using Ceql.Statements;
     using Ceql.Utils;
 
-    public class TransactionBody
+    public class TransactionBody : ITransactionBody
     {
         ITransaction _transaction;        
 
