@@ -10,7 +10,7 @@ namespace Ceql.Contracts
     {
         void Update<T>(IEnumerable<T> entities);
         T InsertSingle<T>(T entity);
-        IEnumerable<T> Insert<T>(IEnumerable<T> records);
+        IEnumerable<T> Insert<T>(IEnumerable<T> records, Func<T,T> onTransform = null);
         IEnumerable<T> FullInsert<T>(IEnumerable<T> records);
         void Delete<T>(IEnumerable<T> records);
         void Delete<T>(Expression<BooleanExpression<T>> records);

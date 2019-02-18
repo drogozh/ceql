@@ -37,9 +37,9 @@ namespace Ceql.Execution
         /// <returns>The insert.</returns>
         /// <param name="entities">Entities.</param>
         /// <typeparam name="T">The 1st type parameter.</typeparam>
-        public virtual IEnumerable<T> Insert<T>(IEnumerable<T> entities)
+        public virtual IEnumerable<T> Insert<T>(IEnumerable<T> entities, Func<T,T> onTransform = null)
         {
-            return Insert(entities, new InsertClause<T>().Model);
+            return Insert(entities, new InsertClause<T>().Model, onTransform);
         }
 
         /// <summary>
@@ -112,12 +112,17 @@ namespace Ceql.Execution
         }
 
         #region Private Methods
-        private IEnumerable<T> Insert<T>(IEnumerable<T> entities, Model.InsertStatementModel<T> model)
+        private IEnumerable<T> Insert<T>(IEnumerable<T> entities, Model.InsertStatementModel<T> model, Func<T,T> onTransform = null)
         {
             var command = _transaction.Connection.CreateCommand();
-
-            foreach (var entity in entities)
+            if(onTransform == null) 
             {
+                onTransform = instance => instance;
+            }
+
+            foreach (var _entity in entities)
+            {
+                var entity = onTransform(_entity);
                 command.CommandText = model.ApplyParameters(entity);
                 _transaction.Connector.PreInsert<T>(command, entity, model.IsFull);
                 command.ExecuteScalar();
