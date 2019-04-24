@@ -19,17 +19,7 @@
         //static constructor
         static CeqlConfiguration()
         {
-            try
-            {
-                var section = JObject.Parse(File.ReadAllText("appsettings.json"))
-                    .GetValue("Ceql")
-                    .ToObject<CeqlSection>();
-
-                _instance = new CeqlConfiguration(section);
-            }
-            catch (Exception) {
-                return;        
-            }
+            Load("appsettings.json");
         }
 
         //singleton getter
@@ -38,20 +28,24 @@
             get { return _instance; }
         }
 
-
         /// <summary>
         /// Use to load configuration file
         /// </summary>
         /// <param name="configFilePath"></param>
-        public static void Load(string configFilePath)
+        public static void Load(string fileName)
         {
-            var section = JObject.Parse(File.ReadAllText(configFilePath))
-                .GetValue("Ceql")
-                .ToObject<CeqlSection>();
+            try
+            {
+                var section = JObject.Parse(File.ReadAllText(fileName))
+                    .GetValue("Ceql")
+                    .ToObject<CeqlSection>();
 
-            _instance = new CeqlConfiguration(section);
-        }
-
+                _instance = new CeqlConfiguration(section);
+            }
+            catch (Exception) {
+                return;        
+            }
+        }  
 
         private readonly ICeqlSection _section;
 
