@@ -10,124 +10,26 @@ using Ceql.Composition;
 using Ceql.Expressions;
 using Ceql.Model;
 using Ceql.Contracts.Attributes;
+using Ceql.Contracts;
 
 namespace Ceql.Execution
 {
-
-    internal class ParameterResultInfo
-    {
-        
-        public Type Type;
-        public List<ArgumentAlias> ArgumentMapping;
-        public List<Tuple<string, string, MemberInfo>> MemberMapping;
-        public ConstructorInfo Constructor;
-        public object[] ConstArgumentsBuffer;
-
-        public object CreateInstance(IVirtualDataReader reader)
-        {
-            
-            //set contructor arguments
-            for (var i = 0; i < ConstArgumentsBuffer.Length; i++)
-            {
-                var argumentAlias = ArgumentMapping[i];
-                var resultObject = reader[argumentAlias.Alias];
-
-                if(resultObject is DBNull) {
-                    ConstArgumentsBuffer[i] = null;
-                } else {
-                    ConstArgumentsBuffer[i] = resultObject;
-                }
-            }
-
-            //create instance
-            var instance = Constructor.Invoke(ConstArgumentsBuffer);
-
-            //set properties on an instance
-            for (var i = 0; i < MemberMapping.Count; i++)
-            {
-                var tuple = MemberMapping[i];
-                var v = reader[tuple.Item1];
-
-                // null values are skipped
-                // property vlues will be set to their defaults
-                if (v == DBNull.Value) continue;
-
-                //set field
-                var field = tuple.Item3 as FieldInfo;
-                if(field != null) SetValue(instance,field,v);
-
-                //set property only if set method is available
-                var property = tuple.Item3 as PropertyInfo;
-                if(property != null && property.SetMethod != null) SetValue(instance, property, v);
-
-            }
-
-            return instance;
-        }
-
-
-        /// <summary>
-        /// Sets value on a property
-        /// </summary>
-        /// <param name="instance"></param>
-        /// <param name="info"></param>
-        /// <param name="value"></param>
-        private void SetValue(object instance, PropertyInfo info, object value)
-        {
-            if (IsNullable(info))
-            {
-                info.SetValue(instance, value);
-                return;
-            }
-            info.SetValue(instance,value);
-        }
-
-        /// <summary>
-        /// Sets value on a field info
-        /// </summary>
-        /// <param name="instance"></param>
-        /// <param name="info"></param>
-        /// <param name="value"></param>
-        private void SetValue(object instance, FieldInfo info, object value)
-        {
-            if (IsNullable(info))
-            {
-                info.SetValue(instance, value);
-                return;
-            }
-            info.SetValue(instance,value);
-        }
-
-
-
-        public Boolean IsNullable(PropertyInfo pInfo)
-        {
-            return pInfo.PropertyType.GetTypeInfo().IsGenericType &&
-                   pInfo.PropertyType.GetGenericTypeDefinition() == typeof (Nullable<>);
-        }
-
-        public Boolean IsNullable(FieldInfo fInfo)
-        {
-            return fInfo.FieldType.GetTypeInfo().IsGenericType &&
-                   fInfo.FieldType.GetGenericTypeDefinition() == typeof (Nullable<>);
-        }
-
-    }
-
-
     class SelectEnumerator<TResult> : IEnumerator<TResult>
     {
-
-        
         private IEnumerable<SelectAlias> _selectList; 
 
         private List<TResult> _result;
+
         private IEnumerator<TResult> listEnumerator;
-        public SelectEnumerator(SelectClause<TResult> selectClause )
+
+        private IConnectorFormatter _formatter;
+
+        public SelectEnumerator(SelectClause<TResult> selectClause, IConnectorFormatter formatter)
         {
             var rowLambda = selectClause.SelectExpression as LambdaExpression;
             var compiledRowLambda = rowLambda.Compile();
             var paramInfo = new List<ParameterResultInfo>();
+            _formatter = formatter;
 
             var generatedSelect = selectClause.Model;
             _selectList = generatedSelect.SelectList;
@@ -173,7 +75,7 @@ namespace Ceql.Execution
                 for (var i = 0; i < paramInfo.Count; i++)
                 {
                     var p = paramInfo[i];
-                    if (p != null) arguments[i] = p.CreateInstance(reader);
+                    if (p != null) arguments[i] = p.CreateInstance(reader,_formatter);
                 }
                 _result.Add((TResult) compiledRowLambda.DynamicInvoke(arguments));
             });

@@ -3,6 +3,7 @@
     using System.Collections;
     using System.Collections.Generic;
     using System.Linq.Expressions;
+    using Ceql.Configuration;
     using Ceql.Contracts;
     using Ceql.Execution;
     using Ceql.Statements;
@@ -27,7 +28,7 @@
 
         public IEnumerator<T> GetEnumerator()
         {
-            return new SelectEnumerator<T>(this);
+            return new SelectEnumerator<T>(this,CeqlConfiguration.Instance.GetConnectorFormatter());
         }
 
         IEnumerator IEnumerable.GetEnumerator()

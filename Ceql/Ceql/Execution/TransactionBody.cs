@@ -43,17 +43,6 @@ namespace Ceql.Execution
         }
 
         /// <summary>
-        /// Fulls the insert.
-        /// </summary>
-        /// <returns>The insert.</returns>
-        /// <param name="entities">Entities.</param>
-        /// <typeparam name="T">The 1st type parameter.</typeparam>
-        public virtual IEnumerable<T> FullInsert<T>(IEnumerable<T> entities)
-        {
-            return Insert(entities,new InsertClause<T>().FullModel);
-        }
-
-        /// <summary>
         /// Generates and executes DELETE statement for each 
         /// entity in the entities collection
         /// </summary>
@@ -96,7 +85,7 @@ namespace Ceql.Execution
         public virtual void Update<T>(IEnumerable<T> entities)
         {
             Delete(entities);
-            FullInsert(entities);
+            Insert(entities);
             return; 
         }
 
@@ -123,7 +112,7 @@ namespace Ceql.Execution
             foreach (var _entity in entities)
             {
                 var entity = onTransform(_entity);
-                command.CommandText = model.ApplyParameters(entity);
+                command.CommandText = model.GetSql(entity);
                 _transaction.Connector.PreInsert<T>(command, entity, model.IsFull);
                 command.ExecuteScalar();
                 _transaction.Connector.PostInsert<T>(command, entity, model.IsFull);

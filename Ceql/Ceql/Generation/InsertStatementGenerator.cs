@@ -21,17 +21,13 @@
             var table = TypeHelper.GetType<Attributes.Table>(statement.Type);
 
             // dont take  keys fields
-            IEnumerable<PropertyInfo> fields = null;
+            //IEnumerable<PropertyInfo> fields = null;
 
-            if (isFull)
-            {
-                fields = TypeHelper.GetPropertiesForAttribute<Attributes.Field>(table);
-            }
-            else
-            {
-                fields = TypeHelper.GetPropertiesForAttribute<Attributes.Field>(table)
-                    .Where(f => f.GetCustomAttribute<Attributes.AutoSequence>() == null);
-            }
+            var autoFields = TypeHelper.GetPropertiesForAttribute<Attributes.Field>(table)
+            .Where(f => f.GetCustomAttribute<Attributes.AutoSequence>() != null);
+            
+            var fields = TypeHelper.GetPropertiesForAttribute<Attributes.Field>(table)
+            .Where(f => f.GetCustomAttribute<Attributes.AutoSequence>() == null);
 
             var tableName = TypeHelper.GetAttribute<Attributes.Table>(table).Name;
             var schemaAtr = TypeHelper.GetAttribute<Attributes.Schema>(table);
@@ -41,6 +37,7 @@
             return new InsertStatementModel<T>(CeqlConfiguration.Instance.GetConnectorFormatter())
             {
                 Fields = fields,
+                AutoFields = autoFields,
                 TableName = tableName,
                 SchemaName = schemaName,
                 IsFull = isFull            

@@ -111,5 +111,38 @@ namespace Ceql.Utils
             }
             return fieldAttr.Name;
         }
+
+        /// <summary>
+        /// Returns default value for Type
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static object GetDefaultValue(Type type)
+        {
+            if(type.IsValueType)
+            {
+                Activator.CreateInstance(type);
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static bool IsDefaultValue(object value)
+        {
+            var type = value.GetType();
+            if(type.IsValueType)
+            {
+                var defaultValue = Activator.CreateInstance(type);
+                return value.Equals(defaultValue);
+            } 
+            else 
+            {
+                return value == null;
+            }
+        }
     }
 }

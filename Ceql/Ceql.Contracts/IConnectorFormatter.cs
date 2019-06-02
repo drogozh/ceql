@@ -8,9 +8,27 @@ namespace Ceql.Contracts
 {
     public interface IConnectorFormatter
     {
+        /// <summary>
+        /// Formats value for database target
+        /// </summary>
+        /// <param name="instance"></param>
+        /// <param name="source"></param>
+        /// <returns></returns>
         object Format(ISelectAlias instance, object source);
 
+        /// <summary>
+        /// Formats value for database target
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         object Format(object obj);
+
+        /// <summary>
+        /// Formats values read from selected result set
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        object FormatFrom(object obj);
 
         string TableNameEscape(string schemaName, string tableName);
 

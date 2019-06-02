@@ -41,6 +41,16 @@
             return "'" + obj.ToString() + "'";        
         }
 
+        /// <summary>
+        /// Passthrough formatter
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public virtual object FormatFrom(object obj)
+        {
+            return obj;
+        }
+
         public virtual object FormatMethodInfo(ISelectAlias instance, MethodInfo mi)
         {
             if (mi.Name == "ToString") return new SqlSnippet("CAST( "+instance.ToString() + " as VARCHAR(10))");
