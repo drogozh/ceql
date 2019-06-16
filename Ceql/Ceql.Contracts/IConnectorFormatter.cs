@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -28,7 +29,10 @@ namespace Ceql.Contracts
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
+        
         object FormatFrom(object obj);
+
+        object FormatFrom(PropertyInfo property, object obj);
 
         string TableNameEscape(string schemaName, string tableName);
 

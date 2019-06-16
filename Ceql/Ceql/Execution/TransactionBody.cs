@@ -100,6 +100,13 @@ namespace Ceql.Execution
             return new UpdateStatementExec<T>(_transaction, expressions);
         }
 
+        public void RunSql(string sql)
+        {
+            var command = _transaction.Connection.CreateCommand();
+            command.CommandText = sql;
+            command.ExecuteScalar();
+        }
+
         #region Private Methods
         private IEnumerable<T> Insert<T>(IEnumerable<T> entities, Model.InsertStatementModel<T> model, Func<T,T> onTransform = null)
         {

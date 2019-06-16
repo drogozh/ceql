@@ -51,6 +51,21 @@
             return obj;
         }
 
+        /// <summary>
+        /// Handle specific types
+        /// </summary>
+        /// <param name="property"></param>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public virtual object FormatFrom(PropertyInfo property, object obj)
+        {
+            if(property.PropertyType == typeof(bool) && obj.GetType() == typeof(int))
+            {
+                return Convert.ToBoolean(obj);
+            }
+            return obj;
+        }
+
         public virtual object FormatMethodInfo(ISelectAlias instance, MethodInfo mi)
         {
             if (mi.Name == "ToString") return new SqlSnippet("CAST( "+instance.ToString() + " as VARCHAR(10))");

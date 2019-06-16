@@ -14,5 +14,11 @@ namespace Ceql.Contracts
         void Delete<T>(IEnumerable<T> records);
         void Delete<T>(Expression<BooleanExpression<T>> records);
         IUpdateStatement<T> Set<T>(params Expression<SelectExpression<T, object>>[] expressions);
+        
+        /// <summary>
+        /// For testing purposes only
+        /// Executes plain SQL command against current transaction
+        /// </summary>
+        void RunSql(string sql);
     }
 }
