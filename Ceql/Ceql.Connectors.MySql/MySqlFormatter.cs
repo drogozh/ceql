@@ -65,5 +65,23 @@
             // todo (dr): create InvalidFormatException type
             throw new Exception();
         }
+
+        public override object FormatFrom(object obj)
+        {
+            if(obj is DateTime)
+            {
+                return DateTime.SpecifyKind((DateTime)obj, DateTimeKind.Utc);
+            }
+            return base.FormatFrom(obj);
+        }
+
+        public override object FormatFrom(PropertyInfo property, object obj)
+        {
+            if(obj is DateTime)
+            {
+                return DateTime.SpecifyKind((DateTime)obj, DateTimeKind.Utc);
+            }
+            return base.FormatFrom(property,obj);
+        }
     }
 }
