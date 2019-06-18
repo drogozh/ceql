@@ -10,6 +10,7 @@
     using Ceql.Contracts.Attributes;
     using Ceql.Composition;
     using Ceql.Statements;
+    using Ceql.Configuration;
 
     public abstract class AbstractComposer
     {
@@ -73,6 +74,43 @@
         public static FromClause<TResult> From<TResult>(SelectClause<TResult> selectClause)
         {
             return new FromClause<TResult>(selectClause);
+        }
+
+        /// <summary>
+        /// Executes plain SQL statement immediately
+        /// For testing purposes only, not to be used over untrusted input
+        /// Query text is not checked for validity or injection
+        /// </summary>
+        /// <param name="sql"></param>
+        public static void Sql(string sql)
+        {
+            using(var connection = CeqlConfiguration.Instance.GetConnection())
+            {
+                connection.Open();
+                try 
+                {
+                    using(var command = connection.CreateCommand())
+                    {
+                        command.CommandText = sql;
+                        command.ExecuteScalar();
+                    }
+                } 
+                finally 
+                {
+                    connection.Close();
+                }
+            }   
+        }
+
+        /// <summary>
+        /// Executes plain sql statement via select clause
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <typeparam name="TResult"></typeparam>
+        /// <returns></returns>
+        public static SelectClause<TResult> Sql<TResult>(string sql)
+        {
+            return null;
         }
 
         /// <summary>

@@ -53,27 +53,22 @@ namespace Ceql.Execution
             return list;
         }
 
-
         public void Close()
         {
            // Reader.Close();
             Connection.Close();
         }
 
-
         public void Dispose()
         {
-            throw new NotImplementedException();
+            Connection.Dispose();
         }
-
-
 
         protected void OpenDbConnection(SelectStatement select)
         {
             var config = CeqlConfiguration.Instance;
 
             var sql = select.Sql;
-
            
             IDbCommand command = null;
 
@@ -81,7 +76,6 @@ namespace Ceql.Execution
             var retry = RetryCount;
             while (retry-- > 0)
             {
-
                 try
                 {
                     if (Connection.State == ConnectionState.Closed)

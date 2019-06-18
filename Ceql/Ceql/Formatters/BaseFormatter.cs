@@ -57,12 +57,24 @@
         /// <param name="property"></param>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public virtual object FormatFrom(PropertyInfo property, object obj)
+        public virtual object FormatFrom(Type toType, object obj)
         {
-            if(property.PropertyType == typeof(bool) && obj.GetType() == typeof(int))
+            if(toType == typeof(bool) && obj.GetType() == typeof(int))
             {
                 return Convert.ToBoolean(obj);
             }
+
+            // some DBMS seem to treat int as int64 others int32            
+            if(toType == typeof(System.Int16))
+            {
+                return Convert.ToInt16(obj);
+            }
+
+            if(toType == typeof(System.Int32))
+            {
+                return Convert.ToInt32(obj);
+            }
+
             return obj;
         }
 
@@ -76,7 +88,7 @@
         {
             return alias.ToSqlString();
         }
-
+     
         /// <summary>
         /// Does not escape table names
         /// </summary>
@@ -85,5 +97,6 @@
         public abstract string TableNameEscape(string schemaName, string tableName);
 
         public abstract string ColumnNameEscape(string columnName);
+
     }
 }

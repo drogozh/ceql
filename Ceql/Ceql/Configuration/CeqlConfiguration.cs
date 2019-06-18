@@ -13,13 +13,19 @@
 
     public class CeqlConfiguration : ICeqlConfiguration
     {
-
         private static ICeqlConfiguration _instance = null;
        
         //static constructor
         static CeqlConfiguration()
         {
-            Load("appsettings.json");
+            try 
+            {
+                Load("appsettings.json");
+            } 
+            catch(Exception ex)
+            {
+
+            }
         }
 
         //singleton getter
@@ -34,17 +40,11 @@
         /// <param name="configFilePath"></param>
         public static void Load(string fileName)
         {
-            try
-            {
-                var section = JObject.Parse(File.ReadAllText(fileName))
-                    .GetValue("Ceql")
-                    .ToObject<CeqlSection>();
+            var section = JObject.Parse(File.ReadAllText(fileName))
+                .GetValue("Ceql")
+                .ToObject<CeqlSection>();
 
-                _instance = new CeqlConfiguration(section);
-            }
-            catch (Exception) {
-                return;        
-            }
+            _instance = new CeqlConfiguration(section);
         }  
 
         private readonly ICeqlSection _section;

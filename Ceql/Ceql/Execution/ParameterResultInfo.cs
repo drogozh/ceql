@@ -46,7 +46,7 @@ namespace Ceql.Execution
             {
                 var tuple = MemberMapping[i];
                 var property = tuple.Item3 as PropertyInfo;
-                var v = formatter.FormatFrom(property,reader[tuple.Item1]);
+                var v = reader[tuple.Item1];
 
                 // null values are skipped
                 // property vlues will be set to their defaults
@@ -54,10 +54,16 @@ namespace Ceql.Execution
 
                 //set field
                 var field = tuple.Item3 as FieldInfo;
-                if(field != null) SetValue(instance,field,v);
+                if(field != null) 
+                {
+                    SetValue(instance,field,formatter.FormatFrom(field.FieldType,v));
+                } 
 
                 //set property only if set method is available
-                if(property != null && property.SetMethod != null) SetValue(instance, property, v);
+                if(property != null && property.SetMethod != null) 
+                {
+                    SetValue(instance, property, formatter.FormatFrom(property.PropertyType,v));
+                }
             }
 
             return instance;

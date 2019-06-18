@@ -32,7 +32,7 @@ namespace Ceql.Contracts
         
         object FormatFrom(object obj);
 
-        object FormatFrom(PropertyInfo property, object obj);
+        object FormatFrom(Type toType, object obj);
 
         string TableNameEscape(string schemaName, string tableName);
 

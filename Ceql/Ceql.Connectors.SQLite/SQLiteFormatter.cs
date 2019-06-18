@@ -6,16 +6,12 @@
     using System;
     using System.Reflection;
 
-    public class MySqlFormatter : BaseFormatter
+    public class SQLiteFormatter : BaseFormatter
     {
 
         public override string TableNameEscape(string schemaName, string tableName)
         {
-            if (String.IsNullOrEmpty(schemaName))
-            {
-                return "`" + tableName + "`";
-            }
-            return "`" + schemaName + "`.`" + tableName + "`";
+            return "`" + tableName + "`";
         }
 
         public override string ColumnNameEscape(string columnName)
@@ -64,6 +60,24 @@
 
             // todo (dr): create InvalidFormatException type
             throw new Exception();
+        }
+
+        public override object FormatFrom(object obj)
+        {
+            if(obj is DateTime)
+            {
+                return DateTime.SpecifyKind((DateTime)obj, DateTimeKind.Utc);
+            }
+            return base.FormatFrom(obj);
+        }
+
+        public override object FormatFrom(Type toType, object obj)
+        {
+            if(obj is DateTime)
+            {
+                return DateTime.SpecifyKind((DateTime)obj, DateTimeKind.Utc);
+            }
+            return base.FormatFrom(toType,obj);
         }
     }
 }
