@@ -45,6 +45,15 @@
                 .ToObject<CeqlSection>();
 
             _instance = new CeqlConfiguration(section);
+        }
+
+        /// <summary>
+        /// Initialize configuration using section object
+        /// </summary>
+        /// <param name="section"></param>
+        public static void Load(CeqlSection section)
+        {
+            _instance = new CeqlConfiguration(section);
         }  
 
         private readonly ICeqlSection _section;
